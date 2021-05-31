@@ -1,0 +1,16 @@
+{
+  "name": "@folkforms/file-io",
+  "version": "0.1.2",
+  "description": "A few simple file IO functions.",
+  "main": "file-io.js",
+  "scripts": {
+    "release": "npm version patch && npm publish --access=public",
+    "test": "node test.js"
+  },
+  "author": "Alan Bergin",
+  "license": "ISC",
+  "dependencies": {
+    "fs-extra": "^9.1.0",
+    "glob": "^7.1.6"
+  }
+}
