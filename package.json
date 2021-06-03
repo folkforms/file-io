@@ -5,12 +5,13 @@
   "main": "file-io.js",
   "scripts": {
     "release": "npm whoami && npm version patch && npm publish --access=public",
-    "test": "node test.js"
+    "test": "jest"
   },
   "author": "Alan Bergin",
   "license": "ISC",
   "dependencies": {
     "fs-extra": "^9.1.0",
-    "glob": "^7.1.6"
+    "glob": "^7.1.6",
+    "jest": "^27.0.4"
   }
 }

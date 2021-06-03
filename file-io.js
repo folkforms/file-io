@@ -15,12 +15,22 @@ const globFiles = (folder, extension) => {
 }
 
 /**
+ * Read the contents of a file into an array.
+ *
+ * @param {string} filename file to read
+ * @returns {array} file contents
+ */
+const readLines = filename => {
+  return readLinesAsString(filename).split("\n");
+}
+
+/**
  * Read the contents of a file into a string.
  *
  * @param {string} filename file to read
  * @returns {string} file contents
  */
-const readLines = filename => {
+const readLinesAsString = filename => {
   const contents = fs.readFileSync(filename, 'utf8');
   return contents;
 }
@@ -32,7 +42,7 @@ const readLines = filename => {
  * @returns {object} file contents parsed with JSON.parse
  */
 const readJson = filename => {
-  return JSON.parse(readLines(filename));
+  return JSON.parse(readLinesAsString(filename));
 }
 
 /**
@@ -52,5 +62,5 @@ const writeLines = (filename, data, append = false) => {
   fs.outputFileSync(filename, dataOut, options);
 }
 
-const fileio = { globFiles, readLines, readJson, writeLines };
+const fileio = { globFiles, readLines, readLinesAsString, readJson, writeLines };
 module.exports = fileio;
