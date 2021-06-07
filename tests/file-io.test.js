@@ -46,12 +46,12 @@ test("Test writeLines", () => {
   expect(actual).toEqual(expected);
 });
 
-test("Test globFiles", () => {
+test("Test glob", () => {
   // Arrange
-  const expected = [ "tests/test-globFiles/bar/bar.txt", "tests/test-globFiles/foo.txt" ];
+  const expected = [ "tests/test-glob/bar/bar.txt", "tests/test-glob/foo.txt" ];
 
   // Act
-  const actual = fileio.glob("tests/test-globFiles/**/*.txt");
+  const actual = fileio.glob("tests/test-glob/**/*.txt");
 
   // Assert
   expect(actual).toEqual(expected);
