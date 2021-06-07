@@ -1,17 +1,14 @@
 const fs = require('fs-extra');
-const glob = require('glob');
+const globLib = require('glob');
 
 /**
- * Recursively glob all files in the given folder with the given extension.
+ * Glob all files according to the given pattern.
  *
- * @param {string} folder folder to search
- * @param {string} extension file extension to include
+ * @param {string} pattern glob pattern
  * @returns {array} files found
  */
-const globFiles = (folder, extension) => {
-  const globStr = folder + (folder.endsWith("/") ? "" : "/") + "**/*." + extension;
-  const files = glob.sync(globStr);
-  return files;
+const glob = (pattern) => {
+  return globLib.sync(pattern);
 }
 
 /**
@@ -62,5 +59,5 @@ const writeLines = (filename, data, append = false) => {
   fs.outputFileSync(filename, dataOut, options);
 }
 
-const fileio = { globFiles, readLines, readLinesAsString, readJson, writeLines };
+const fileio = { glob, readLines, readLinesAsString, readJson, writeLines };
 module.exports = fileio;
