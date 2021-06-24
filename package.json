@@ -4,14 +4,16 @@
   "description": "A few simple file IO functions.",
   "main": "file-io.js",
   "scripts": {
-    "release": "npm whoami && npm version patch && npm publish --access=public",
+    "release": "yarn test && npm whoami && yarn install --production --force && npm version patch && npm publish --access=public && yarn install",
     "test": "jest"
   },
   "author": "Alan Bergin",
   "license": "ISC",
   "dependencies": {
     "fast-glob": "^3.2.5",
-    "fs-extra": "^9.1.0",
+    "fs-extra": "^9.1.0"
+  },
+  "devDependencies": {
     "jest": "^27.0.4"
   }
 }
