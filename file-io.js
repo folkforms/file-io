@@ -1,5 +1,5 @@
 const fs = require('fs-extra');
-const globLib = require('glob');
+const globLib = require('fast-glob');
 
 /**
  * Glob all files according to the given pattern.
