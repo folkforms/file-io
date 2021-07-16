@@ -4,11 +4,14 @@ const globLib = require('fast-glob');
 /**
  * Glob all files according to the given pattern.
  *
+ * This is a thin wrapper around `fast-glob` (https://www.npmjs.com/package/fast-glob)
+ *
  * @param {string} pattern glob pattern
+ * @param {object} options fast-glob options
  * @returns {array} files found
  */
-const glob = (pattern) => {
-  return globLib.sync(pattern);
+const glob = (pattern, options) => {
+  return globLib.sync(pattern, options);
 }
 
 /**
