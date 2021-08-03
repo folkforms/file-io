@@ -1,5 +1,6 @@
 const fs = require('fs-extra');
 const globLib = require('fast-glob');
+const shelljs = require("shelljs");
 
 /**
  * Glob all files according to the given pattern.
@@ -62,5 +63,25 @@ const writeLines = (filename, data, append = false) => {
   fs.outputFileSync(filename, dataOut, options);
 }
 
-const fileio = { glob, readLines, readLinesAsString, readJson, writeLines };
+/**
+ * Copies the given folder recursively, preserving directory structure.
+ *
+ * @param {string} inputFolder input folder
+ * @param {string} outputFolder output folder, will be created if it does not exist
+ * @param {object} options options used when globbing up the input files
+ */
+const copyFolder = (inputFolder, outputFolder, options) => {
+  let files = glob(`${inputFolder}/**/*`, options);
+  const copyTasks = [];
+  files.forEach(f => {
+    copyTasks.push({ src: f, dest: f.replace(inputFolder, outputFolder) });
+  });
+  copyTasks.forEach(c => {
+    const folderPart = c.dest.substring(0, c.dest.lastIndexOf("/"));
+    shelljs.mkdir("-p", folderPart);
+    shelljs.cp(c.src, c.dest);
+  });
+}
+
+const fileio = { glob, readLines, readLinesAsString, readJson, writeLines, copyFolder };
 module.exports = fileio;

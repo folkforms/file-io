@@ -56,4 +56,28 @@ test("Test glob", () => {
   // Assert
   expect(actual).toEqual(expected);
 });
-  
+
+test("Test copyFolder", () => {
+  const inputFolder = "tests/test-copy-folder/input";
+  const expectedFolder = "tests/test-copy-folder/expected";
+  const temporaryFolder = "tests/test-copy-folder/temp";
+  fileio.copyFolder(inputFolder, temporaryFolder);
+
+  // Compare temporary folder with expected folder
+  const actualFiles = fileio.glob(`${temporaryFolder}/**`);
+  const expectedFiles = fileio.glob(`${expectedFolder}/**`);
+
+  // ...Check file lists
+  const modActualFiles = actualFiles.map(file => file.replace(temporaryFolder, expectedFolder));
+  expect(modActualFiles).toEqual(expectedFiles);
+
+  // ...Check number of files
+  expect(actualFiles.length).toEqual(expectedFiles.length);
+
+  // ...Check file contents
+  for(let i = 0; i < actualFiles.length; i++) {
+    const actualContents = fileio.readLines(actualFiles[i]);
+    const expectedContents = fileio.readLines(expectedFiles[i]);
+    expect(actualContents).toEqual(expectedContents);
+  }
+});
