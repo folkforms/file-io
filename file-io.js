@@ -1,6 +1,7 @@
 const fs = require('fs-extra');
 const globLib = require('fast-glob');
-const shelljs = require("shelljs");
+const shelljs = require('shelljs');
+const untildify = require('untildify');
 
 /**
  * Glob all files according to the given pattern.
@@ -32,7 +33,7 @@ const readLines = filename => {
  * @returns {string} file contents
  */
 const readLinesAsString = filename => {
-  const contents = fs.readFileSync(filename, 'utf8');
+  const contents = fs.readFileSync(untildify(filename), 'utf8');
   return contents;
 }
 
@@ -60,7 +61,7 @@ const writeLines = (filename, data, append = false) => {
     dataOut = data.join("\n");
   }
   const options = { flag: append ? "a" : "w" };
-  fs.outputFileSync(filename, dataOut, options);
+  fs.outputFileSync(untildify(filename), dataOut, options);
 }
 
 /**
@@ -74,7 +75,11 @@ const copyFolder = (inputFolder, outputFolder, options) => {
   let files = glob(`${inputFolder}/**/*`, options);
   const copyTasks = [];
   files.forEach(f => {
-    copyTasks.push({ src: f, dest: f.replace(inputFolder, outputFolder) });
+    f = untildify(f);
+    copyTasks.push({
+      src: f,
+      dest: f.replace(inputFolder, outputFolder)
+    });
   });
   copyTasks.forEach(c => {
     const folderPart = c.dest.substring(0, c.dest.lastIndexOf("/"));
