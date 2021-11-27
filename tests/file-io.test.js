@@ -1,6 +1,6 @@
 const fileio = require("../file-io.js");
 
-test("Test readLines", () => {
+test("readLines", () => {
   // Arrange
   const expected = [ "aaa", "bbbaaa", "bbb", "" ];
 
@@ -11,7 +11,7 @@ test("Test readLines", () => {
   expect(actual).toEqual(expected);
 });
 
-test("Test readLinesAsString", () => {
+test("readLinesAsString", () => {
   // Arrange
   const expected = "aaa\nbbbaaa\nbbb\n";
 
@@ -22,7 +22,7 @@ test("Test readLinesAsString", () => {
   expect(actual).toEqual(expected);
 });
   
-test("Test readJson", () => {
+test("readJson", () => {
   // Arrange
   const expected = { foo: "bar", muk: "qux" };
 
@@ -33,7 +33,7 @@ test("Test readJson", () => {
   expect(actual).toEqual(expected);
 });
 
-test("Test writeLines", () => {
+test("writeLines", () => {
   // Arrange
   const data = [ "line 1", "line 2" ];
   const expected = "line 1\nline 2";
@@ -46,7 +46,7 @@ test("Test writeLines", () => {
   expect(actual).toEqual(expected);
 });
 
-test("Test glob", () => {
+test("glob", () => {
   // Arrange
   const expected = [ "tests/test-glob/bar/bar.txt", "tests/test-glob/foo.txt" ].sort();
 
@@ -57,7 +57,7 @@ test("Test glob", () => {
   expect(actual).toEqual(expected);
 });
 
-test("Test copyFolder", () => {
+test("copyFolder", () => {
   const inputFolder = "tests/test-copy-folder/input";
   const expectedFolder = "tests/test-copy-folder/expected";
   const temporaryFolder = "tests/test-copy-folder/temp";
