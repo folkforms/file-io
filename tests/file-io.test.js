@@ -81,3 +81,21 @@ test("Test copyFolder", () => {
     expect(actualContents).toEqual(expectedContents);
   }
 });
+
+test("exists detects a folder correctly", () => {
+  const inputFolder = "tests/test-copy-folder/input";
+  const actual = fileio.exists(inputFolder);
+  expect(actual).toEqual(true);
+});
+
+test("exists detects a file correctly", () => {
+  const inputFolder = "tests/test-copy-folder/input/file1.md";
+  const actual = fileio.exists(inputFolder);
+  expect(actual).toEqual(true);
+});
+
+test("exists detects non-existent file or folder correctly", () => {
+  const inputFolder = "tests/does-not-exist";
+  const actual = fileio.exists(inputFolder);
+  expect(actual).toEqual(false);
+});

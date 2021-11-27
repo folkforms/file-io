@@ -88,5 +88,15 @@ const copyFolder = (inputFolder, outputFolder, options) => {
   });
 }
 
-const fileio = { glob, readLines, readLinesAsString, readJson, writeLines, copyFolder };
+/**
+ * Checks if the given path exists.
+ *
+ * @param {string} path
+ */
+const exists = path => {
+  path = untildify(path);
+  return fs.existsSync(path);
+}
+
+const fileio = { glob, readLines, readLinesAsString, readJson, writeLines, copyFolder, exists };
 module.exports = fileio;
