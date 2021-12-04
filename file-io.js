@@ -27,13 +27,14 @@ const readLines = filename => {
 }
 
 /**
- * Read the contents of a file into a string.
+ * Read the contents of a file into a string. Will automatically convert \r\n into \n.
  *
  * @param {string} filename file to read
  * @returns {string} file contents
  */
 const readLinesAsString = filename => {
-  const contents = fs.readFileSync(untildify(filename), 'utf8');
+  let contents = fs.readFileSync(untildify(filename), 'utf8');
+  contents = contents.replace(/\r\n/g, '\n');
   return contents;
 }
 
