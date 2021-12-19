@@ -68,6 +68,9 @@ const writeLines = (filename, data, append = false) => {
 /**
  * Copies the given folder recursively, preserving directory structure.
  *
+ * For example, given the files: `/tmp/foo.txt` and `/tmp/bar.txt`, `copyFolder('/tmp', '/abc')`
+ * will result in `/abc/foo.txt` and `/abc/bar.txt`.
+ *
  * @param {string} inputFolder input folder
  * @param {string} outputFolder output folder, will be created if it does not exist
  * @param {object} options options used when globbing up the input files
@@ -99,5 +102,35 @@ const exists = path => {
   return fs.existsSync(path);
 }
 
-const fileio = { glob, readLines, readLinesAsString, readJson, writeLines, copyFolder, exists };
+/**
+ * Removes the given file, or else removes the given folder and its contents recursively.
+ *
+ * @param {string} path
+ */
+const rm_rf = path => {
+  path = untildify(path);
+  fs.removeSync(path);
+}
+
+/**
+ * Creates the given folder and any required intermediate folders.
+ *
+ * @param {string} path
+ */
+const mkdir_p = path => {
+  path = untildify(path);
+  fs.mkdirpSync(path);
+}
+
+const fileio = {
+  glob,
+  readLines,
+  readLinesAsString,
+  readJson,
+  writeLines,
+  copyFolder,
+  exists,
+  rm_rf,
+  mkdir_p,
+};
 module.exports = fileio;

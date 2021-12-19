@@ -1,3 +1,4 @@
+const fs = require("fs-extra");
 const fileio = require("../file-io.js");
 
 test("readLines", () => {
@@ -98,4 +99,43 @@ test("exists detects non-existent file or folder correctly", () => {
   const inputFolder = "tests/does-not-exist";
   const actual = fileio.exists(inputFolder);
   expect(actual).toEqual(false);
+});
+
+test("rm_rf deletes a file", () => {
+  const tempFile = "tests/temp_rm_rf.txt";
+  expect(fileio.exists(tempFile)).toEqual(false);
+  fileio.writeLines(tempFile, "temp file created for rm_rf test");
+
+  fileio.rm_rf(tempFile);
+
+  expect(fileio.exists(tempFile)).toEqual(false);
+});
+
+test("rm_rf deletes a folder and its contents", () => {
+  const targetFolder = "tests/test_rm_rf";
+  expect(fileio.exists(targetFolder)).toEqual(false);
+
+  const inputFolder = `${targetFolder}/foo`;
+  fs.mkdirpSync(inputFolder);
+  const testFile1 = `${inputFolder}/muk1.txt`;
+  fileio.writeLines(testFile1, "muk1");
+  const testFile2 = `${inputFolder}/muk2.txt`;
+  fileio.writeLines(testFile2, "muk2");
+
+  fileio.rm_rf("tests/test_rm_rf"); // Delete parent folder
+
+  expect(fileio.exists(targetFolder)).toEqual(false);
+});
+
+test("mkdir_p creates a folder and all child folders", () => {
+  const inputFolder1 = "tests/does-not-exist";
+  const inputFolder2 = "tests/does-not-exist/foo";
+  fs.remove(inputFolder1);
+  expect(fileio.exists(inputFolder1)).toEqual(false);
+  expect(fileio.exists(inputFolder2)).toEqual(false);
+
+  fileio.mkdir_p(inputFolder2);
+
+  expect(fileio.exists(inputFolder2)).toEqual(true);
+  fs.remove(inputFolder1);
 });

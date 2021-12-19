@@ -9,3 +9,5 @@ A single package for file IO that combines `fs-extra`, `fast-glob` and `untildif
 - `writeLines(path, array, append = false)` - Writes the given array of lines (joined with `"\n"`) to a file
 - `copyFolder(inputFolder, outputFolder, options)` - Copies the given folder recursively, preserving directory structure. Options are the options used when globbing up the input folder. See [fast-glob](https://www.npmjs.com/package/fast-glob) options.
 - `exists(path)` - Checks if the given path exists
+- `rm_rf(path)` - Removes the given file, or else removes the given folder and its contents recursively
+- `mkdir_p(path)` - Creates the given folder and any required intermediate folders
