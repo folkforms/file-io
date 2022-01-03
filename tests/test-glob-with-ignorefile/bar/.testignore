@@ -1,0 +1,2 @@
+# This will ignore all muk.txt files relative to this folder
+**/muk.txt

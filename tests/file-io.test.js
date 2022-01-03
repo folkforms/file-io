@@ -58,6 +58,16 @@ test("glob", () => {
   expect(actual).toEqual(expected);
 });
 
+test("glob with ignorefile", () => {
+  const expected = [
+    "tests/test-glob-with-ignorefile/bar/bar.txt",
+    "tests/test-glob-with-ignorefile/foo.txt",
+    "tests/test-glob-with-ignorefile/muk.txt"
+  ].sort();
+  const actual = fileio.glob("tests/test-glob-with-ignorefile/**/*.txt", null, ".testignore").sort();
+  expect(actual).toEqual(expected);
+});
+
 test("copyFolder", () => {
   const inputFolder = "tests/test-copy-folder/input";
   const expectedFolder = "tests/test-copy-folder/expected";

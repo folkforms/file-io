@@ -2,6 +2,7 @@ const fs = require('fs-extra');
 const globLib = require('fast-glob');
 const shelljs = require('shelljs');
 const untildify = require('untildify');
+const ignore = require('ignore');
 
 /**
  * Glob all files according to the given pattern.
@@ -10,10 +11,41 @@ const untildify = require('untildify');
  *
  * @param {string} pattern glob pattern
  * @param {object} options fast-glob options
+ * @param {string} useIgnoreFile searches for files named `<useIgnoreFile>` (e.g. `.gitignore` or
+ * `.fooignore`) and uses their contents to ignore files in the results. This follows the same rules
+ * as a `.gitignore` file.
  * @returns {array} files found
  */
-const glob = (pattern, options) => {
-  return globLib.sync(pattern, options);
+const glob = (pattern, options, useIgnoreFile) => {
+  options = options || undefined;
+  const files = globLib.sync(pattern, options);
+  if(!useIgnoreFile) {
+    return files;
+  }
+  return _removeIgnoredFiles(files, useIgnoreFile);
+}
+
+const _removeIgnoredFiles = (files, useIgnoreFile) => {
+  const dotFilesGlob = `**/${useIgnoreFile}`;
+  let dotFiles = fileio.glob(dotFilesGlob, { dot: true });
+  dotFiles = dotFiles.filter(f => f.endsWith(useIgnoreFile));
+  const ignoreData = _readIgnoreData(dotFiles);
+  const ig = ignore().add(ignoreData);
+  files = ig.filter(files);
+  return files;
+}
+
+const _readIgnoreData = inputFiles => {
+  let data = [];
+  inputFiles.forEach(ignoreFile => {
+    let ignoreData = fileio.readLines(ignoreFile);
+    ignoreData = ignoreData.filter(f => f.length > 0);
+    ignoreData = ignoreData.map(item => `${ignoreFile.substring(0, ignoreFile.lastIndexOf("/") + 1)}${item}`);
+    ignoreData = ignoreData.map(item => item.replace(/\/{2,}/g, "/"));
+    ignoreData = ignoreData.map(item => item.startsWith("./") ? item.substring(2) : item);
+    data.push(ignoreData);
+  });
+  return data.flat();
 }
 
 /**
