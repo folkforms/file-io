@@ -1,6 +1,6 @@
 {
   "name": "@folkforms/file-io",
-  "version": "0.2.8",
+  "version": "0.2.9",
   "description": "A few simple file IO functions.",
   "main": "file-io.js",
   "scripts": {
