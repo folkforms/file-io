@@ -122,6 +122,18 @@ const mkdir_p = path => {
   fs.mkdirpSync(path);
 }
 
+/**
+ * Copies a file to a file or folder.
+ *
+ * @param {*} src source file
+ * @param {*} dest destination file or folder
+ */
+const cp = (src, dest) => {
+  src = untildify(src);
+  dest = untildify(dest);
+  shelljs.cp(src, dest);
+}
+
 const fileio = {
   glob,
   readLines,
@@ -132,5 +144,6 @@ const fileio = {
   exists,
   rm_rf,
   mkdir_p,
+  cp,
 };
 module.exports = fileio;

@@ -11,3 +11,4 @@ A single package for file IO that combines `fs-extra`, `fast-glob` and `untildif
 - `exists(path)` - Checks if the given path exists
 - `rm_rf(path)` - Removes the given file, or else removes the given folder and its contents recursively
 - `mkdir_p(path)` - Creates the given folder and any required intermediate folders
+- `cp(src, dest)` - Copies a file to a file or folder

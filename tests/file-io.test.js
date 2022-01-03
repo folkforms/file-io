@@ -139,3 +139,26 @@ test("mkdir_p creates a folder and all child folders", () => {
   expect(fileio.exists(inputFolder2)).toEqual(true);
   fs.remove(inputFolder1);
 });
+
+test("cp copies a file to a file", () => {
+  const src = "tests/cp/src.txt";
+  const dest = "tests/cp/output/foo.txt"
+  expect(fileio.exists(dest)).toEqual(false);
+
+  fileio.cp(src, dest);
+
+  expect(fileio.exists(dest)).toEqual(true);
+  fileio.rm_rf(dest);
+});
+
+test("cp copies a file to a folder", () => {
+  const src = "tests/cp/src.txt";
+  const destFolder = "tests/cp/output"
+  const expectedFile = `${destFolder}/src.txt`;
+  expect(fileio.exists(expectedFile)).toEqual(false);
+
+  fileio.cp(src, destFolder);
+
+  expect(fileio.exists(expectedFile)).toEqual(true);
+  fileio.rm_rf(expectedFile);
+});
