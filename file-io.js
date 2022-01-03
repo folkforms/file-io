@@ -2,7 +2,7 @@ const fs = require('fs-extra');
 const globLib = require('fast-glob');
 const shelljs = require('shelljs');
 const untildify = require('untildify');
-const ignore = require('ignore');
+const ignoreLib = require('ignore');
 
 /**
  * Glob all files according to the given pattern.
@@ -16,31 +16,51 @@ const ignore = require('ignore');
  * as a `.gitignore` file.
  * @returns {array} files found
  */
-const glob = (pattern, options, useIgnoreFile) => {
+const glob = (pattern, options) => {
   options = options || undefined;
   const files = globLib.sync(pattern, options);
-  if(!useIgnoreFile) {
-    return files;
-  }
-  return _removeIgnoredFiles(files, useIgnoreFile);
-}
-
-const _removeIgnoredFiles = (files, useIgnoreFile) => {
-  const dotFilesGlob = `**/${useIgnoreFile}`;
-  let dotFiles = fileio.glob(dotFilesGlob, { dot: true });
-  dotFiles = dotFiles.filter(f => f.endsWith(useIgnoreFile));
-  const ignoreData = _readIgnoreData(dotFiles);
-  const ig = ignore().add(ignoreData);
-  files = ig.filter(files);
   return files;
 }
 
-const _readIgnoreData = inputFiles => {
+/**
+ * Remove files from a list based on the set of ignore files present in `rootFolder` and subfolders.
+ *
+ * @param {*} files list of files to process
+ * @param {*} rootFolder root folder containing ignore files
+ * @param {*} ignoreFile ignore file name e.g. `.gitignore` or `.fooignore`
+ */
+const ignore = (files, rootFolder, ignoreFile) => {
+  const dotFilesGlob = `${rootFolder}/**/${ignoreFile}`;
+  if(rootFolder.endsWith("/") == false) {
+    rootFolder += "/";
+  }
+  let dotFiles = fileio.glob(dotFilesGlob, { dot: true });
+  // console.debug(`#### dotFilesGlob = ${dotFilesGlob}`);
+  // console.debug(`#### dotFiles = ${JSON.stringify(dotFiles)}`);
+  dotFiles = dotFiles.filter(f => f.endsWith(ignoreFile));
+  const ignoreData = _readIgnoreData(dotFiles, rootFolder);
+  // console.debug(`#### ignoreData = ${JSON.stringify(ignoreData)}`);
+  const ig = ignoreLib().add(ignoreData);
+  // Note: The 'ignore' library processes ignore files as relative to a root folder, which is why we
+  // have this convoluted process of removing the root folder, processing, and adding it back again.
+  // console.debug(`#### files = ${JSON.stringify(files)}`);
+  const noRootFiles = files.map(f => f.replace(rootFolder, ""));
+  // console.debug(`#### noRootFiles = ${JSON.stringify(noRootFiles)}`);
+  const filteredFiles = ig.filter(noRootFiles);
+  // console.debug(`#### filteredFiles = ${JSON.stringify(filteredFiles)}`);
+  const reAddRootFiles = filteredFiles.map(f => rootFolder + f);
+  // console.debug(`#### reAddRootFiles = ${JSON.stringify(reAddRootFiles)}`);
+  return reAddRootFiles;
+}
+
+const _readIgnoreData = (inputFiles, rootFolder) => {
   let data = [];
   inputFiles.forEach(ignoreFile => {
     let ignoreData = fileio.readLines(ignoreFile);
     ignoreData = ignoreData.filter(f => f.length > 0);
-    ignoreData = ignoreData.map(item => `${ignoreFile.substring(0, ignoreFile.lastIndexOf("/") + 1)}${item}`);
+    // ignoreData = ignoreData.map(item => `${ignoreFile.substring(0, ignoreFile.lastIndexOf("/") + 1)}${item}`);
+    const ignoreFileFolder = ignoreFile.substring(0, ignoreFile.lastIndexOf("/") + 1).replace(rootFolder, "");
+    ignoreData = ignoreData.map(item => `${ignoreFileFolder}${item}`);
     ignoreData = ignoreData.map(item => item.replace(/\/{2,}/g, "/"));
     ignoreData = ignoreData.map(item => item.startsWith("./") ? item.substring(2) : item);
     data.push(ignoreData);
@@ -168,6 +188,7 @@ const cp = (src, dest) => {
 
 const fileio = {
   glob,
+  ignore,
   readLines,
   readLinesAsString,
   readJson,

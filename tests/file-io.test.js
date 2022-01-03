@@ -35,13 +35,14 @@ test("glob", () => {
   expect(actual).toEqual(expected);
 });
 
-test("glob with ignorefile", () => {
+test("ignore", () => {
   const expected = [
-    "tests/test-glob-with-ignorefile/bar/bar.txt",
-    "tests/test-glob-with-ignorefile/foo.txt",
-    "tests/test-glob-with-ignorefile/muk.txt"
+    "tests/test-ignore/bar/bar.txt",
+    "tests/test-ignore/foo.txt",
+    "tests/test-ignore/muk.txt"
   ].sort();
-  const actual = fileio.glob("tests/test-glob-with-ignorefile/**/*.txt", null, ".testignore").sort();
+  const files = fileio.glob("tests/test-ignore/**/*.txt").sort();
+  const actual = fileio.ignore(files, "tests/test-ignore", ".testignore");
   expect(actual).toEqual(expected);
 });
 

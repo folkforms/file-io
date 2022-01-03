@@ -2,10 +2,8 @@
 
 A single package for file IO that combines `fs-extra`, `fast-glob`, `untildify` and `ignore`.
 
-- `glob(pattern, options, useIgnoreFile)` - Globs all files according to the given pattern and returns an array of the file paths. This is a thin wrapper around [fast-glob](https://www.npmjs.com/package/fast-glob).
-    - `pattern`: Glob pattern e.g. `**/*.txt`
-    - `options`: Options for fast-glob
-    - `useIgnoreFile`: Name of ignore file to use e.g. `.gitignore` or `.fooignore`
+- `glob(pattern, options)` - Globs all files according to the given pattern and returns an array of the file paths. This is a thin wrapper around [fast-glob](https://www.npmjs.com/package/fast-glob).
+- `ignore(files, rootFolder, ignoreFile)`: Remove files from a list based on the set of ignore files present in `rootFolder` and subfolders
 - `readLines(path)` - Reads a text file into an array of lines
 - `readLinesAsString(path)` - Reads a text file into a single string
 - `readJson(path)` - Reads a text file and parses it as JSON. Equivalent to calling `JSON.parse(readLines(path))`.
