@@ -2,59 +2,36 @@ const fs = require("fs-extra");
 const fileio = require("../file-io.js");
 
 test("readLines", () => {
-  // Arrange
   const expected = [ "aaa", "bbbaaa", "bbb", "" ];
-
-  // Act
   const actual = fileio.readLines("tests/input.txt");
-
-  // Assert
   expect(actual).toEqual(expected);
 });
 
 test("readLinesAsString", () => {
-  // Arrange
   const expected = "aaa\nbbbaaa\nbbb\n";
-
-  // Act
   const actual = fileio.readLinesAsString("tests/input.txt");
-
-  // Assert
   expect(actual).toEqual(expected);
 });
   
 test("readJson", () => {
-  // Arrange
   const expected = { foo: "bar", muk: "qux" };
-
-  // Act
   const actual = fileio.readJson("tests/input.json");
-
-  // Assert
   expect(actual).toEqual(expected);
 });
 
 test("writeLines", () => {
-  // Arrange
   const data = [ "line 1", "line 2" ];
   const expected = "line 1\nline 2";
 
-  // Act
   fileio.writeLines("tests/temp1.txt", data, false);
   const actual = fileio.readLinesAsString("tests/temp1.txt");
 
-  // Assert
   expect(actual).toEqual(expected);
 });
 
 test("glob", () => {
-  // Arrange
   const expected = [ "tests/test-glob/bar/bar.txt", "tests/test-glob/foo.txt" ].sort();
-
-  // Act
   const actual = fileio.glob("tests/test-glob/**/*.txt").sort();
-
-  // Assert
   expect(actual).toEqual(expected);
 });
 
@@ -122,19 +99,19 @@ test("rm_rf deletes a file", () => {
 });
 
 test("rm_rf deletes a folder and its contents", () => {
-  const targetFolder = "tests/test_rm_rf";
-  expect(fileio.exists(targetFolder)).toEqual(false);
+  const parentFolder = "tests/test_rm_rf";
+  expect(fileio.exists(parentFolder)).toEqual(false);
 
-  const inputFolder = `${targetFolder}/foo`;
+  const inputFolder = `${parentFolder}/foo`;
   fs.mkdirpSync(inputFolder);
   const testFile1 = `${inputFolder}/muk1.txt`;
   fileio.writeLines(testFile1, "muk1");
   const testFile2 = `${inputFolder}/muk2.txt`;
   fileio.writeLines(testFile2, "muk2");
 
-  fileio.rm_rf("tests/test_rm_rf"); // Delete parent folder
+  fileio.rm_rf(parentFolder);
 
-  expect(fileio.exists(targetFolder)).toEqual(false);
+  expect(fileio.exists(parentFolder)).toEqual(false);
 });
 
 test("mkdir_p creates a folder and all child folders", () => {
