@@ -161,7 +161,7 @@ const exists = path => {
  */
 const rm_rf = path => {
   path = untildify(path);
-  fs.removeSync(path);
+  shelljs.rm('-rf', path);
 }
 
 /**
