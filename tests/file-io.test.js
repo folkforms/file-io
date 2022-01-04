@@ -115,6 +115,23 @@ test("rm_rf deletes a folder and its contents", () => {
   expect(fileio.exists(parentFolder)).toEqual(false);
 });
 
+test("rm_rf deletes only the specified files", () => {
+  const parentFolder = "tests/test_rm_rf_2";
+  fileio.rm_rf(parentFolder);
+  fs.mkdirpSync(parentFolder);
+  const testFile1 = `${parentFolder}/foo.txt`;
+  fileio.writeLines(testFile1, "foo");
+  const testFile2 = `${parentFolder}/bar.md`;
+  fileio.writeLines(testFile2, "bar");
+
+  fileio.rm_rf(`${parentFolder}/*.txt`);
+
+  expect(fileio.exists(testFile1)).toEqual(false);
+  expect(fileio.exists(testFile2)).toEqual(true);
+
+  fileio.rm_rf(parentFolder);
+});
+
 test("mkdir_p creates a folder and all child folders", () => {
   const inputFolder1 = "tests/does-not-exist";
   const inputFolder2 = "tests/does-not-exist/foo";
